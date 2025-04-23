@@ -71,13 +71,29 @@ public class Tour {
   @Schema(description = "Тип тура", example = "BEACH", required = true)
   private String type;
 
-  @Column(name = "image_path")
-  @Schema(description = "Путь к изображению тура", example = "/uploads/images/tour1.jpg")
-  private String imagePath;
+  @Column(name = "image_data", columnDefinition = "BYTEA")
+  @Schema(description = "Изображение тура", accessMode = Schema.AccessMode.WRITE_ONLY)
+  private byte[] imageData;
 
-  @Column(name = "file_path")
-  @Schema(description = "Путь к файлу с описанием тура", example = "/uploads/files/tour1.pdf")
-  private String filePath;
+  @Column(name = "image_name")
+  @Schema(description = "Имя файла изображения", example = "tour_photo.jpg")
+  private String imageName;
+
+  @Column(name = "image_type")
+  @Schema(description = "MIME-тип изображения", example = "image/jpeg")
+  private String imageType;
+
+  @Column(name = "file_data", columnDefinition = "BYTEA")
+  @Schema(description = "Файл с описанием тура", accessMode = Schema.AccessMode.WRITE_ONLY)
+  private byte[] fileData;
+
+  @Column(name = "file_name")
+  @Schema(description = "Имя файла с описанием", example = "tour_description.pdf")
+  private String fileName;
+
+  @Column(name = "file_type")
+  @Schema(description = "MIME-тип файла", example = "application/pdf")
+  private String fileType;
 
   @NotNull(message = "Дата начала тура обязательна")
   @Column(name = "start_date", nullable = false)
@@ -135,7 +151,8 @@ public class Tour {
   private void calculateDuration() {
     if (startDate != null && endDate != null) {
       // Вычисление продолжительности в днях
-      duration = (int) java.time.temporal.ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate()) + 1;
+      this.duration = (int) java.time.temporal.ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate())
+          + 1;
     }
   }
 

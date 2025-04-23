@@ -25,10 +25,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Аутентификация", description = "API для аутентификации и регистрации пользователей")
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
@@ -36,14 +38,6 @@ public class AuthController {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
-
-  public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository,
-      PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
-    this.authenticationManager = authenticationManager;
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-    this.jwtTokenProvider = jwtTokenProvider;
-  }
 
   @PostMapping("/register")
   @Operation(summary = "Регистрация нового пользователя", description = "Регистрирует нового пользователя в системе и возвращает JWT токен")

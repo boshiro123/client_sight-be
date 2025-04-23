@@ -18,18 +18,16 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/users")
 @Tag(name = "Пользователи", description = "API для работы с пользователями")
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
   private final UserRepository userRepository;
-
-  public UserController(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
 
   @GetMapping("/{id}")
   @Operation(summary = "Получение информации о пользователе по ID", description = "Возвращает информацию о пользователе по указанному ID", security = @SecurityRequirement(name = "bearerAuth"))

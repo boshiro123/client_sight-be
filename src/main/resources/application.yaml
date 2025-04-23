@@ -42,11 +42,11 @@ spring:
   compression:
     enabled: true
 
-  # Настройки инициализации БД
-  sql:
-    init:
-      mode: never
-      continue-on-error: true
+  # # Настройки инициализации БД
+  # sql:
+  #   init:
+  #     mode: never
+  #     continue-on-error: true
 
   jpa:
     hibernate:
@@ -57,10 +57,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: false
 
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml
-    enabled: true
-    contexts: dev
+  # liquibase:
+  #   change-log: classpath:db/changelog/db.changelog-master.xml
+  #   enabled: true
+  #   contexts: dev
 
   jackson:
     serialization:
