@@ -99,6 +99,11 @@ public class Contact {
   @Schema(description = "Пользователь, связанный с контактом")
   private User user;
 
+  @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JsonIgnore
+  @Schema(description = "Заявки, связанные с контактом")
+  private List<Application> applications;
+
   @CreationTimestamp
   @Column(name = "created_at", updatable = false)
   @Schema(description = "Дата и время создания", accessMode = Schema.AccessMode.READ_ONLY)

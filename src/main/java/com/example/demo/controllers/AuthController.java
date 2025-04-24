@@ -20,6 +20,7 @@ import com.example.demo.models.User;
 import com.example.demo.models.UserRole;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.ContactService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,9 +39,10 @@ public class AuthController {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
+  private final ContactService contactService;
 
   @PostMapping("/register")
-  @Operation(summary = "Регистрация нового пользователя", description = "Регистрирует нового пользователя в системе и возвращает JWT токен")
+  @Operation(summary = "Регистрация нового пользователя", description = "Регистрирует нового пользователя в системе, создает запись в контактах и возвращает JWT токен")
   public ResponseEntity<JwtAuthResponse> registerUser(
       @Parameter(description = "Данные для регистрации", required = true) @Valid @RequestBody RegisterDto registerDto) {
 
@@ -56,7 +58,10 @@ public class AuthController {
     user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
     user.setRole(UserRole.TOURIST); // По умолчанию - турист
 
-    userRepository.save(user);
+    user = userRepository.save(user);
+
+    // Создаем запись в контактах для нового пользователя
+    contactService.createContactFromUser(user);
 
     // Аутентификация нового пользователя и генерация токена
     Authentication authentication = authenticationManager.authenticate(

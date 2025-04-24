@@ -84,6 +84,15 @@ public class Application {
   @JsonIgnore
   private User user;
 
+  @Column(name = "contact_id")
+  @Schema(description = "ID контакта", example = "1")
+  private Long contactId;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "contact_id", insertable = false, updatable = false)
+  @JsonIgnore
+  private Contact contact;
+
   @OneToOne(mappedBy = "application", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JsonIgnore
   private ClientTour clientTour;
