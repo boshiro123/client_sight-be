@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,6 +11,7 @@ import com.example.demo.models.AgeGroup;
 import com.example.demo.models.Contact;
 import com.example.demo.models.Gender;
 import com.example.demo.models.User;
+import com.example.demo.models.UserRole;
 import com.example.demo.repository.ContactRepository;
 import com.example.demo.repository.UserRepository;
 
@@ -39,6 +43,14 @@ public class UserService {
     return convertToDto(updatedUser);
   }
 
+  @Transactional(readOnly = true)
+  public List<UserInfoDto> getAllTourists() {
+    List<User> tourists = userRepository.findAllByRole(UserRole.TOURIST);
+    return tourists.stream()
+        .map(this::convertToDto)
+        .collect(Collectors.toList());
+  }
+
   private UserInfoDto convertToDto(User user) {
     return UserInfoDto.builder()
         .id(user.getId())
@@ -47,6 +59,7 @@ public class UserService {
         .role(user.getRole())
         .createdAt(user.getCreatedAt())
         .updatedAt(user.getUpdatedAt())
+        .contact(user.getContact())
         .build();
   }
 

@@ -105,7 +105,7 @@ public class ApplicationService {
           .ageGroup(applicationDto.getAgeGroup())
           .gender(applicationDto.getGender())
           .discountPercent(0)
-          .isClient(true) // Делаем клиентом сразу, так как подал заявку
+          .isClient(false) // Делаем клиентом сразу, так как подал заявку
           .user(user) // Связываем с пользователем, если он есть
           .build();
 

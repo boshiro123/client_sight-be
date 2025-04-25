@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,6 +65,13 @@ public class UserController {
     userInfo.setUpdatedAt(user.getUpdatedAt());
 
     return ResponseEntity.ok(userInfo);
+  }
+
+  @GetMapping("/all-tourists")
+  @Operation(summary = "Получение всех туристов", description = "Возвращает всех туристов", security = @SecurityRequirement(name = "bearerAuth"))
+  public ResponseEntity<List<UserInfoDto>> getAllTourists() {
+    List<UserInfoDto> tourists = userService.getAllTourists();
+    return ResponseEntity.ok(tourists);
   }
 
   @PutMapping("/{id}")
