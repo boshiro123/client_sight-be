@@ -120,6 +120,11 @@ public class Tour {
   @Schema(description = "Количество свободных мест", example = "15", required = true)
   private Integer availableSlots;
 
+  @Min(value = 0, message = "Цена тура не может быть отрицательной")
+  @Column(name = "price", nullable = false)
+  @Schema(description = "Цена тура", example = "10000", required = true)
+  private Double price;
+
   @Column(name = "is_registration_closed", nullable = false)
   @Schema(description = "Признак закрытия регистрации", example = "false")
   private Boolean isRegistrationClosed = false;

@@ -67,4 +67,12 @@ public class ContactController {
     UserInfoDto createdUser = contactService.createUserFromContact(contactDto);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
   }
+
+  @PutMapping("/update-discount-percent/{id}")
+  @Operation(summary = "Обновление процента скидки", description = "Обновляет процент скидки", security = @SecurityRequirement(name = "bearerAuth"))
+  public ResponseEntity<ContactDto> updateDiscountPercent(@PathVariable Long id,
+      @RequestParam Integer discountPercent) {
+    ContactDto updatedContact = contactService.updateDiscountPercent(id, discountPercent);
+    return ResponseEntity.ok(updatedContact);
+  }
 }

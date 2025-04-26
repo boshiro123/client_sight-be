@@ -52,6 +52,9 @@ public class TourDto {
   @Schema(description = "MIME-тип изображения", example = "image/jpeg")
   private String imageType;
 
+  @Schema(description = "Город проведения тура", example = "Анталия")
+  private String city;
+
   @Schema(description = "Двоичные данные файла с описанием тура")
   private byte[] fileData;
 
@@ -60,6 +63,10 @@ public class TourDto {
 
   @Schema(description = "MIME-тип файла", example = "application/pdf")
   private String fileType;
+
+  @Min(value = 0, message = "Цена тура не может быть отрицательной")
+  @Schema(description = "Цена тура", example = "10000", required = true)
+  private Double price;
 
   @NotNull(message = "Дата начала тура обязательна")
   @Schema(description = "Дата начала тура", example = "2023-06-15T00:00:00", required = true)

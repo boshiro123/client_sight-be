@@ -116,4 +116,5 @@ public class ApplicationController {
     applicationService.deleteApplication(id);
     return ResponseEntity.noContent().build();
   }
+
 }

@@ -164,4 +164,12 @@ public class ContactService {
         .discountPercent(contact.getDiscountPercent())
         .build();
   }
+
+  public ContactDto updateDiscountPercent(Long id, Integer discountPercent) {
+    Contact contact = contactRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Контакт с ID " + id + " не найден"));
+    contact.setDiscountPercent(discountPercent);
+    contactRepository.save(contact);
+    return convertToDto(contact);
+  }
 }

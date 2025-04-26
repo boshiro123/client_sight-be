@@ -97,6 +97,7 @@ public class TourService {
         .totalSlots(tour.getTotalSlots())
         .availableSlots(tour.getAvailableSlots())
         .isRegistrationClosed(tour.getIsRegistrationClosed())
+        .price(tour.getPrice())
         .build();
   }
 
@@ -122,6 +123,7 @@ public class TourService {
         .totalSlots(tourDto.getTotalSlots())
         .availableSlots(tourDto.getAvailableSlots())
         .isRegistrationClosed(tourDto.getIsRegistrationClosed())
+        .price(tourDto.getPrice())
         .build();
   }
 }
