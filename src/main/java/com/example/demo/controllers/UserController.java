@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,7 +22,7 @@ import com.example.demo.repository.ContactRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.ContactService;
 import com.example.demo.service.UserService;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -72,6 +73,27 @@ public class UserController {
   public ResponseEntity<List<UserInfoDto>> getAllTourists() {
     List<UserInfoDto> tourists = userService.getAllTourists();
     return ResponseEntity.ok(tourists);
+  }
+
+  @GetMapping("/all-employees")
+  @Operation(summary = "Получение всех сотрудников", description = "Возвращает всех сотрудников", security = @SecurityRequirement(name = "bearerAuth"))
+  public ResponseEntity<List<UserInfoDto>> getAllEmployees() {
+    List<UserInfoDto> employees = userService.getAllEmployees();
+    return ResponseEntity.ok(employees);
+  }
+
+  @PostMapping("/create-employee")
+  @Operation(summary = "Создание сотрудника", description = "Создает нового сотрудника", security = @SecurityRequirement(name = "bearerAuth"))
+  public ResponseEntity<UserInfoDto> createEmployee(@RequestBody UserInfoDto userInfo) {
+    UserInfoDto createdEmployee = userService.createEmployee(userInfo);
+    return ResponseEntity.ok(createdEmployee);
+  }
+
+  @DeleteMapping("/{id}")
+  @Operation(summary = "Удаление пользователя", description = "Удаляет пользователя по указанному ID", security = @SecurityRequirement(name = "bearerAuth"))
+  public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    userService.deleteUser(id);
+    return ResponseEntity.noContent().build();
   }
 
   @PutMapping("/{id}")

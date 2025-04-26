@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import com.example.demo.models.User;
 import com.example.demo.models.UserRole;
 import com.example.demo.repository.ContactRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.utils.PasswordGenerator;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final EmailService emailService;
+  private final ContactRepository contactRepository;
 
   @Transactional
   public UserInfoDto updateUser(Long id, UserInfoDto userInfo) {
@@ -49,6 +54,49 @@ public class UserService {
     return tourists.stream()
         .map(this::convertToDto)
         .collect(Collectors.toList());
+  }
+
+  @Transactional(readOnly = true)
+  public List<UserInfoDto> getAllEmployees() {
+    List<User> employees = userRepository.findAllByRole(UserRole.EMPLOYEE);
+    return employees.stream()
+        .map(this::convertToDto)
+        .collect(Collectors.toList());
+  }
+
+  @Transactional
+  public UserInfoDto createEmployee(UserInfoDto userInfo) {
+    // Генерируем пароль
+    String rawPassword = PasswordGenerator.generateSimplePassword();
+
+    // Создаем пользователя
+    User user = new User();
+    user.setFullName(userInfo.getFullName());
+    user.setEmail(userInfo.getEmail());
+    user.setPassword(passwordEncoder.encode(rawPassword));
+    user.setRole(UserRole.EMPLOYEE);
+
+    // Сохраняем пользователя
+    user = userRepository.save(user);
+
+    // Отправляем email с данными для входа
+    emailService.sendEmail(user.getEmail(), "Добро пожаловать в нашу систему!",
+        "Здравствуйте, " + user.getFullName() + "!\n\n" +
+            "Мы рады приветствовать Вас в нашей туристической системе. " +
+            "Для Вас был создан личный кабинет сотрудника со следующими данными:\n\n" +
+            "Email: " + user.getEmail() + "\n" +
+            "Пароль: " + rawPassword + "\n\n" +
+            "Рекомендуем сменить пароль при первом входе в систему.\n\n" +
+            "С уважением,\n" +
+            "Команда поддержки");
+
+    return convertToDto(user);
+  }
+
+  @Transactional
+  public void deleteUser(Long id) {
+    userRepository.deleteById(id);
+    contactRepository.deleteByUserId(id);
   }
 
   private UserInfoDto convertToDto(User user) {
