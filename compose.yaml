@@ -40,6 +40,8 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.org
       - PGADMIN_DEFAULT_PASSWORD=admin
+    networks:
+      - client-sight-network
 
 networks:
   client-sight-network:
