@@ -12,8 +12,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRESDB_ROOT_PASSWORD}
     depends_on:
       - postgres
-  #   networks:
-  #     - b2b-network
+    networks:
+      - client-sight-network
 
   postgres:
     container_name: client-sight-db
@@ -30,20 +30,20 @@ services:
     ports:
       - ${POSTGRESDB_LOCAL_PORT}:${POSTGRESDB_DOCKER_PORT}
     restart: unless-stopped
-    # networks:
-    #   - b2b-network
+    networks:
+      - client-sight-network
 
   pgadmin:
     image: dpage/pgadmin4:6.14
     ports:
-      - "5051:80"
+      - "5055:80"
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.org
       - PGADMIN_DEFAULT_PASSWORD=admin
 
-# networks:
-#   b2b-network:
-#     external: true
+networks:
+  client-sight-network:
+    external: true
 
 volumes:
   postgres:

@@ -14,11 +14,11 @@ spring:
       max-lifetime: 1200000
 
   # Настройки инициализации БД
-  sql:
-    init:
-      mode: never
-      continue-on-error: true
-      data-locations: classpath:data.sql
+  # sql:
+  #   init:
+  #     mode: never
+  #     continue-on-error: true
+  #     data-locations: classpath:data.sql
 
   # Настройки почты
   mail:

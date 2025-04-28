@@ -104,9 +104,14 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-
-
 		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator-core</artifactId>
+			<version>0.59</version> <!-- Используйте последнюю версию -->
+		</dependency>
+
 	</dependencies>
 
 	<build>
