@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.models.Application;
 
@@ -29,4 +31,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
   @Query("SELECT a FROM Application a LEFT JOIN FETCH a.tour LEFT JOIN FETCH a.clientTour WHERE a.email = :email")
   List<Application> findAllByEmail(@Param("email") String email);
+
+  @Modifying
+  @Transactional
+  @Query("UPDATE Application a SET a.user = null WHERE a.user.id = :userId")
+  void nullifyUserInApplications(@Param("userId") Long userId);
 }

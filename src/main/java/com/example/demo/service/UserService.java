@@ -15,6 +15,7 @@ import com.example.demo.models.User;
 import com.example.demo.models.UserRole;
 import com.example.demo.repository.ContactRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.utils.PasswordGenerator;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +29,7 @@ public class UserService {
   private final PasswordEncoder passwordEncoder;
   private final EmailService emailService;
   private final ContactRepository contactRepository;
+  private final ApplicationRepository applicationRepository;
 
   @Transactional
   public UserInfoDto updateUser(Long id, UserInfoDto userInfo) {
@@ -97,6 +99,32 @@ public class UserService {
   public void deleteUser(Long id) {
     userRepository.deleteById(id);
     contactRepository.deleteByUserId(id);
+  }
+
+  @Transactional
+  public void softDeleteUser(Long id) {
+    // Проверяем, существует ли пользователь
+    User user = userRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Пользователь с ID " + id + " не найден"));
+
+    // Обнуляем связи в заявках
+    applicationRepository.nullifyUserInApplications(id);
+
+    // Если у пользователя есть контакт, разрываем связь
+    Contact contact = contactRepository.findByUserId(id).orElse(null);
+    if (contact != null) {
+      contact.setUser(null); // Разрываем связь
+      contact.setIsClient(false); // Контакт больше не является клиентом
+      contactRepository.save(contact);
+    }
+
+    // Также обнуляем связь со стороны пользователя
+    user.setContact(null);
+    userRepository.save(user);
+
+    // Удаляем пользователя через нативный SQL запрос, чтобы избежать каскадного
+    // удаления
+    userRepository.deleteUserWithoutCascade(id);
   }
 
   private UserInfoDto convertToDto(User user) {

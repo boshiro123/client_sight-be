@@ -19,4 +19,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
 
   @Transactional
   void deleteByUserId(Long userId);
+
+  @Query("SELECT c FROM Contact c WHERE c.user IS NULL")
+  java.util.List<Contact> findOrphanedContacts();
 }

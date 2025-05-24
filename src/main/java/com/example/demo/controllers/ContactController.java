@@ -75,4 +75,11 @@ public class ContactController {
     ContactDto updatedContact = contactService.updateDiscountPercent(id, discountPercent);
     return ResponseEntity.ok(updatedContact);
   }
+
+  @GetMapping("/orphaned")
+  @Operation(summary = "Получение осиротевших контактов", description = "Возвращает контакты без связанного пользователя", security = @SecurityRequirement(name = "bearerAuth"))
+  public ResponseEntity<List<ContactDto>> getOrphanedContacts() {
+    List<ContactDto> orphanedContacts = contactService.getOrphanedContacts();
+    return ResponseEntity.ok(orphanedContacts);
+  }
 }

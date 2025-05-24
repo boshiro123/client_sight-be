@@ -96,6 +96,13 @@ public class UserController {
     return ResponseEntity.noContent().build();
   }
 
+  @DeleteMapping("/{id}/soft")
+  @Operation(summary = "Мягкое удаление пользователя", description = "Удаляет пользователя, но сохраняет информацию о контакте", security = @SecurityRequirement(name = "bearerAuth"))
+  public ResponseEntity<Void> softDeleteUser(@PathVariable Long id) {
+    userService.softDeleteUser(id);
+    return ResponseEntity.noContent().build();
+  }
+
   @PutMapping("/{id}")
   @Operation(summary = "Обновление информации о пользователе", description = "Обновляет информацию о пользователе по указанному ID", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<UserInfoDto> updateUser(

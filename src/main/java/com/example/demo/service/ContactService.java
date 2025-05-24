@@ -172,4 +172,14 @@ public class ContactService {
     contactRepository.save(contact);
     return convertToDto(contact);
   }
+
+  /**
+   * Получает все контакты без связанного пользователя (осиротевшие)
+   * Такие контакты остаются после мягкого удаления пользователя
+   */
+  public List<ContactDto> getOrphanedContacts() {
+    return contactRepository.findOrphanedContacts().stream()
+        .map(this::convertToDto)
+        .collect(Collectors.toList());
+  }
 }
